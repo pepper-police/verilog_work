@@ -1,0 +1,114 @@
+# Verilog/SystemVerilog ファイル
+*.v.bak
+*.sv.bak
+
+# ModelSim/QuestaSim 関連ファイル
+*.cr.mti
+*.mpf
+transcript
+*.wlf
+vsim.wlf
+
+# コンパイル済みライブラリ
+work/
+*/_info
+*/_lib*.qdb
+*/_lib*.qpg
+*/_lib*.qtl
+*/_vmake
+
+# シミュレーション出力
+*.vcd
+*.ghw
+*.fst
+*.fst.hier
+*.lxt
+*.lxt2
+*.evcd
+
+# Quartus Prime 関連
+*.qpf
+*.qsf
+*.qws
+db/
+incremental_db/
+output_files/
+*.rpt
+*.summary
+*.pin
+*.jdi
+*.gtm
+*.done
+*.qdf
+*.bak
+
+# Vivado 関連
+*.xpr
+*.cache/
+*.hw/
+*.ip_user_files/
+*.runs/
+*.sim/
+*.srcs/
+*_wrapper.v
+*_wrapper.vhd
+vivado*.log
+vivado*.jou
+
+# ISE 関連
+*.xise
+*.ise
+*.prj
+*.tcl
+*.ngc
+*.ngd
+*.pcf
+*.ncd
+*.par
+*.pad
+*.xpi
+*.xtx
+*.bgn
+*.bit
+*.drc
+*.mrp
+*.ngm
+*.pcf
+*.syr
+*.twr
+*.twx
+*.unroutes
+*.xwbt
+*_bitgen.xwbt
+*_ngdbuild.xrpt
+*_par.xrpt
+*_summary.xml
+*_usage.xml
+*_xst.xrpt
+
+# GTKWave 関連
+*.gtkw
+
+# システムファイル
+.DS_Store
+Thumbs.db
+*.log
+*.tmp
+*.temp
+*~
+
+# エディタ関連
+*.swp
+*.swo
+*~
+.vscode/
+*.sublime-*
+
+# OS関連
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
