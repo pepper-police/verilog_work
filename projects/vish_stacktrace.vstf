@@ -1,0 +1,22 @@
+# Current time Fri Jun 20 09:45:49 2025
+# ModelSim - Intel FPGA Edition Stack Trace
+# Program = vish
+# Id = "2020.1"
+# Version = "2020.02"
+# Date = "Feb 28 2020"
+# Platform = "linuxaloem"
+# 0    0xf5b9ff8e: '_ZNK9Scintilla8Document12NextPositionEii + 0xe' in '/home/okayu0518/intelFPGA/20.1/modelsim_ase/linux/ScintillaTk/libScintillaTk1.14.so'
+# 1    0xf5e33a6b: '<unknown (@0xf5e33a6b)>'
+# 2    0xf5ba611b: '<unknown (@0xf5ba611b)>'
+# 3    0xfffe562a: '<unknown (@0xfffe562a)>'
+# Current time Fri Jun 20 09:49:47 2025
+# ModelSim - Intel FPGA Edition Stack Trace
+# Program = vish
+# Id = "2020.1"
+# Version = "2020.02"
+# Date = "Feb 28 2020"
+# Platform = "linuxaloem"
+# 0    0xf5bdfa20: '_ZNK9Scintilla8Document16LineFromPositionEi + 0x0' in '/home/okayu0518/intelFPGA/20.1/modelsim_ase/linux/ScintillaTk/libScintillaTk1.14.so'
+# 1    0xf7c6bafb: '<unknown (@0xf7c6bafb)>'
+# 2    0xf5c35d5b: '_ZThn692_N11ScintillaTKD1Ev + 0xb' in '/home/okayu0518/intelFPGA/20.1/modelsim_ase/linux/ScintillaTk/libScintillaTk1.14.so'
+# 3    0x81fff963: '<unknown (@0x81fff963)>'
