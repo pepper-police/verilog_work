@@ -7,7 +7,7 @@ module ex_sim();
     // general purpose registers
     reg         clk, rst;
     reg  [31:0] ins, rdata1, rdata2, ed32, nextpc;
-    reg  [31:0] result, newpc;
+    wire  [31:0] result, newpc;
     
     // wires                                               
     wire [31:0] mux2, mux4, mux5;
@@ -48,9 +48,6 @@ module ex_sim();
         rdata1 = 32'h00000000;
         rdata2 = 32'h00000000;
         ed32 = 32'h00000000;
-        nextpc = 32'h00000000;
-        result = 32'h00000000;
-        newpc = 32'h00000000;
 
         // Test cases
         // Example: ADD instruction
