@@ -196,5 +196,6 @@ module ex_sim();
         end else begin
             $display("Test passed: XORI result is %h", result);
         end
+    end
 
 endmodule
