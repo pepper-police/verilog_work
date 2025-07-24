@@ -247,8 +247,6 @@ module ex_sim();
         end else begin
             $display("❌ SOME TESTS FAILED!");
         end
-
-        $finish;
     end
 
 endmodule
