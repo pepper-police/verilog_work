@@ -9,13 +9,19 @@ wire [31:0] MUX2, MUX4, MUX5, alu_res;
 
 wire [5:0] op, func;
 wire [4:0] rs, shamt;
+wire branch;
 assign op = Ins[31:26];
 assign rs = Ins[25:21];
 assign shamt = Ins[10:6];
 assign func = Ins[5:0];
 
+assign branch = (op == BEQ && alu_res == 0) ||
+                (op == BNE && alu_res == 0) ||
+                (op == BLEZ && $signed(Rdata1) <= 0) ||
+                (op == BGTZ && $signed(Rdata1) > 0) ||
+                (op == BLTZ && $signed(Rdata1) < 0);
 assign MUX2 = op == R_FORM ? Rdata2 : Ed32;
-assign MUX4 = alu_res == 0 ? nextPC : (nextPC + (Ed32 << 2));
+assign MUX4 =  branch ? b_addr : nextPC;
 assign MUX5 = (op == R_FORM && (func == JR || func == JALR)) ? Rdata1 : // 3
               (op == J || op == JAL) ? {nextPC[31:28], (Ins[25:0] << 2)} : // 2
               (op == BLTZ || op == BEQ || op == BNE || op == BLEZ || op == BGTZ) ? MUX4 : // 1
