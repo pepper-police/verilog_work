@@ -16,10 +16,10 @@ assign func = Ins[5:0];
 
 assign MUX2 = op == R_FORM ? Rdata2 : Ed32;
 assign MUX4 = alu_res == 0 ? nextPC : (nextPC + (Ed32 << 2));
-assign MUX5 = (op == JALR || Ins[5:0] == JR) ? Rdata1 : // 3
-              (op == J || Ins[5:0] == JAL) ? {nextPC[31:28], (Ins[25:0] << 2)} : // 2
-              (op == BEQ || op == BNE) ? MUX4 : // 1
-               nextPC; // 0
+assign MUX5 = (op == R_FORM && (func == JR || func == JALR)) ? Rdata1 : // 3
+              (op == J || op == JAL) ? {nextPC[31:28], (Ins[25:0] << 2)} : // 2
+              (op == BLTZ || op == BEQ || op == BNE || op == BLEZ || op == BGTZ) ? MUX4 : // 1
+              nextPC; // 0
 
 assign alu_res = ALU(op, rs, shamt, func, Rdata1, MUX2, HI, LO);
 assign Result = alu_res;
@@ -82,30 +82,57 @@ case(f_op)
         ALU = f_Rdata1 | f_MUX2;
     XORI:
         ALU = f_Rdata1 ^ f_MUX2;
+    BEQ:
+        ALU = f_Rdata1 - f_MUX2;
+    BNE:
+        ALU = f_Rdata1 - f_MUX2;
+    BLEZ:
+        ALU = f_Rdata1;
+    BGTZ:
+        ALU = f_Rdata1;
     default:
         ALU = 32'hxxxxxxxx;
 endcase
 endfunction
 
-always @(posedge CLK)
+always @(posedge CLK or posedge RST)
 begin
-    case(op)
-        R_FORM:
-            case(func)
-                MTHI:
-                    HI = MUX2;
-                MTLO:
-                    LO = MUX2;
-                MULT:
-                    {HI, LO} = $signed(Rdata1) * $signed(Rdata2);
-                MULTU:
+    if (RST) begin // 非同期リセット
+        HI <= 32'd0;
+        LO <= 32'd0;
+    end
+    else
+    begin
+        if (op == R_FORM) begin
+            case (func)
+                MTHI:  HI <= Rdata1; // MTHIはrs(Rdata1)の値をHIへ
+                MTLO:  LO <= Rdata1; // MTLOはrs(Rdata1)の値をLOへ
+                MULT:  {HI, LO} <= $signed(Rdata1) * $signed(MUX2);
+                MULTU: {HI, LO} <= Rdata1 * MUX2;
+                DIV:
+                begin
+                    if (MUX2 != 0)
+                    begin
+                        LO <= $signed(Rdata1) / $signed(MUX2);
+                        HI <= $signed(Rdata1) % $signed(MUX2);
+                    end
+                end
+                DIVU:
+                begin
+                    if (MUX2 != 0)
+                    begin
+                        LO <= Rdata1 / MUX2;
+                        HI <= Rdata1 % MUX2;
+                    end
+                end
+                default:
+                begin
+                    HI <= HI;
+                    LO <= LO;
+                end
             endcase
-        default:
-            begin
-                HI <= HI; // HIは更新しない
-                LO <= LO; // LOは更新しない
-            end
-    endcase
+        end
+    end
 end
 
 
