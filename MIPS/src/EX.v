@@ -50,17 +50,17 @@ case(f_op)
         SLTU:
             ALU = f_Rdata1 < f_MUX2;
         SLL:
-            ALU = f_Rdata2 << f_shamt;
+            ALU = f_MUX2 << f_shamt;
         SRL:
-            ALU = f_Rdata2 >> f_shamt;
+            ALU = f_MUX2 >> f_shamt;
         SRA:
-            ALU = f_Rdata2 >>> f_shamt;
+            ALU = f_MUX2 >>> f_shamt;
         SLLV:
-            ALU = f_Rdata2 << f_Rdata1;
+            ALU = f_MUX2 << f_Rdata1;
         SRLV:
-            ALU = f_Rdata2 >> f_Rdata1;
+            ALU = f_MUX2 >> f_Rdata1;
         SRAV:
-            ALU = f_Rdata2 >>> f_Rdata1;
+            ALU = f_MUX2 >>> f_Rdata1;
         MFHI:
             ALU = HI;
         MFLO:
@@ -95,12 +95,16 @@ begin
                 MTHI:
                     HI = MUX2;
                 MTLO:
-                    LO = MUNX2;
+                    LO = MUX2;
                 MULT:
                     {HI, LO} = $signed(Rdata1) * $signed(Rdata2);
                 MULTU:
-                
             endcase
+        default:
+            begin
+                HI <= HI; // HIは更新しない
+                LO <= LO; // LOは更新しない
+            end
     endcase
 end
 
