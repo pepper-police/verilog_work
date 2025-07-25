@@ -8,19 +8,19 @@ reg [31:0] HI, LO;
 wire [31:0] MUX2, MUX4, MUX5, alu_res;
 
 wire [5:0] op, func;
-wire [4:0] rs, shamt;
+wire [4:0] shamt;
 wire branch;
 assign op = Ins[31:26];
-assign rs = Ins[25:21];
 assign shamt = Ins[10:6];
 assign func = Ins[5:0];
-assign b_addr = nextPC + Ed32 << 2; // 分岐先アドレス
+
 
 assign branch = (op == BEQ && alu_res == 0) ||
                 (op == BNE && alu_res != 0) ||
                 (op == BLEZ && $signed(Rdata1) <= 0) ||
                 (op == BGTZ && $signed(Rdata1) > 0) ||
                 (op == BLTZ && $signed(Rdata1) < 0);
+assign b_addr = nextPC + (Ed32 << 2); // 分岐先アドレス
 assign MUX2 = op == R_FORM ? Rdata2 : Ed32;
 assign MUX4 = branch ? b_addr : nextPC;
 assign MUX5 = (op == R_FORM && (func == JR || func == JALR)) ? Rdata1 : // 3
@@ -28,11 +28,11 @@ assign MUX5 = (op == R_FORM && (func == JR || func == JALR)) ? Rdata1 : // 3
               (op == BLTZ || op == BEQ || op == BNE || op == BLEZ || op == BGTZ) ? MUX4 : // 1
               nextPC; // 0
 
-assign alu_res = ALU(op, rs, shamt, func, Rdata1, MUX2, HI, LO);
+assign alu_res = ALU(op, shamt, func, Rdata1, MUX2, HI, LO);
 assign Result = alu_res;
 assign newPC = MUX5;
 
-function [31:0] ALU(input[31:0] f_op, f_rs, f_shamt, f_func, f_Rdata1, f_MUX2, f_HI, f_LO);
+function [31:0] ALU(input[31:0] f_op, f_shamt, f_func, f_Rdata1, f_MUX2, f_HI, f_LO);
 case(f_op)
     R_FORM:
     case(f_func)
