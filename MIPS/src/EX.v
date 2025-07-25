@@ -14,14 +14,15 @@ assign op = Ins[31:26];
 assign rs = Ins[25:21];
 assign shamt = Ins[10:6];
 assign func = Ins[5:0];
+assign b_addr = nextPC + Ed32 << 2; // 分岐先アドレス
 
 assign branch = (op == BEQ && alu_res == 0) ||
-                (op == BNE && alu_res == 0) ||
+                (op == BNE && alu_res != 0) ||
                 (op == BLEZ && $signed(Rdata1) <= 0) ||
                 (op == BGTZ && $signed(Rdata1) > 0) ||
                 (op == BLTZ && $signed(Rdata1) < 0);
 assign MUX2 = op == R_FORM ? Rdata2 : Ed32;
-assign MUX4 =  branch ? b_addr : nextPC;
+assign MUX4 = branch ? b_addr : nextPC;
 assign MUX5 = (op == R_FORM && (func == JR || func == JALR)) ? Rdata1 : // 3
               (op == J || op == JAL) ? {nextPC[31:28], (Ins[25:0] << 2)} : // 2
               (op == BLTZ || op == BEQ || op == BNE || op == BLEZ || op == BGTZ) ? MUX4 : // 1
@@ -51,10 +52,10 @@ case(f_op)
             ALU = f_Rdata1 ^ f_MUX2;
         NOR:
             ALU = ~(f_Rdata1 | f_MUX2);
-        SLT:
-            ALU = $signed(f_Rdata1) < $signed(f_MUX2);
+        SLT: // 32bit値を返す
+            ALU = ($signed(f_Rdata1) < $signed(f_MUX2) ? 32'b1: 32'b0);
         SLTU:
-            ALU = f_Rdata1 < f_MUX2;
+            ALU = (f_Rdata1 < f_MUX2 ? 32'b1: 32'b0);
         SLL:
             ALU = f_MUX2 << f_shamt;
         SRL:
@@ -62,15 +63,15 @@ case(f_op)
         SRA:
             ALU = f_MUX2 >>> f_shamt;
         SLLV:
-            ALU = f_MUX2 << f_Rdata1;
+            ALU = f_MUX2 << f_Rdata1[4:0];
         SRLV:
-            ALU = f_MUX2 >> f_Rdata1;
+            ALU = f_MUX2 >> f_Rdata1[4:0];
         SRAV:
-            ALU = f_MUX2 >>> f_Rdata1;
+            ALU = f_MUX2 >>> f_Rdata1[4:0];
         MFHI:
-            ALU = HI;
+            ALU = f_HI;
         MFLO:
-            ALU = LO;
+            ALU = f_LO;
         default:
             ALU = 32'hxxxxxxxx;
     endcase
@@ -122,6 +123,11 @@ begin
                         LO <= $signed(Rdata1) / $signed(MUX2);
                         HI <= $signed(Rdata1) % $signed(MUX2);
                     end
+                    else
+                    begin
+                        LO <= 32'hxxxxxxxx; // ゼロ除算の処理
+                        HI <= 32'hxxxxxxxx; // ゼロ除算の処理
+                    end
                 end
                 DIVU:
                 begin
@@ -130,12 +136,13 @@ begin
                         LO <= Rdata1 / MUX2;
                         HI <= Rdata1 % MUX2;
                     end
+                    else
+                    begin
+                        LO <= 32'hxxxxxxxx; // ゼロ除算の処理
+                        HI <= 32'hxxxxxxxx; // ゼロ除算の処理
+                    end
                 end
-                default:
-                begin
-                    HI <= HI;
-                    LO <= LO;
-                end
+                default:; // 他の命令は何もしない
             endcase
         end
     end

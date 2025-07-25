@@ -50,6 +50,7 @@ module ex_sim();
             if ((!check_result || result === expected_result) && 
                 (!check_newpc || newpc === expected_newpc)) begin
                 $display("PASS: %s", test_name);
+                $display("      Inputs: instruction=%h, reg1_val=%h, reg2_val=%h, immediate=%h, next_pc=%h", instruction, reg1_val, reg2_val, immediate, next_pc);
                 if (check_result && check_newpc) 
                     $display("      Result=%h, NewPC=%h", result, newpc);
                 else if (check_result) 
@@ -59,6 +60,7 @@ module ex_sim();
                 pass_count = pass_count + 1;
             end else begin
                 $display("FAIL: %s", test_name);
+                $display("      Inputs: instruction=%h, reg1_val=%h, reg2_val=%h, immediate=%h, next_pc=%h", instruction, reg1_val, reg2_val, immediate, next_pc);
                 if (check_result) 
                     $display("      Expected Result=%h, Got=%h", expected_result, result);
                 if (check_newpc) 
