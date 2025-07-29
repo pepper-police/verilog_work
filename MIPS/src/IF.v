@@ -1,0 +1,25 @@
+module IF (CLK, RST, newPC, PC, W_Ins, WE, nextPC, Ins);
+input CLK, RST, WE;
+input[31:0] newPC, W_Ins;
+output reg[31:0] PC, nextPC, Ins;
+
+wire[31:0] im_out;
+
+assign nextPC = PC + 32'd4;
+assign INS = im_out;
+
+always @(posedge CLK)
+begin
+    if (RST)
+    begin
+        PC <= 32'd0;
+        nextPC <= 32'd0;
+        Ins <= 32'd0;
+    end
+    else
+        PC <= newPC;
+end
+
+IM IM0(.CLK(CLK), .RST(RST), .WE(WE), .W_Ins(W_Ins), .Ins(im_out));
+
+endmodule
