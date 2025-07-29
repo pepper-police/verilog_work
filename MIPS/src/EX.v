@@ -61,13 +61,13 @@ case(f_op)
         SRL:
             ALU = f_MUX2 >> f_shamt;
         SRA:
-            ALU = f_MUX2 >>> f_shamt;
+            ALU = $signed(f_MUX2) >>> f_shamt;
         SLLV:
             ALU = f_MUX2 << f_Rdata1[4:0];
         SRLV:
             ALU = f_MUX2 >> f_Rdata1[4:0];
         SRAV:
-            ALU = f_MUX2 >>> f_Rdata1[4:0];
+            ALU = $signed(f_MUX2) >>> f_Rdata1[4:0];
         MFHI:
             ALU = f_HI;
         MFLO:
