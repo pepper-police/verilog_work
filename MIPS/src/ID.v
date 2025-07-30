@@ -1,3 +1,4 @@
+// Instruction Decode (ID) Module for MIPS Processor
 module ID (CLK, RST, Ins, Wdata, Rdata1, Rdata2, Ed32);
 `include "common_param.vh"
 input CLK, RST;

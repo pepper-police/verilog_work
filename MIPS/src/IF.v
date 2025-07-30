@@ -1,3 +1,4 @@
+// Instruction Fetch (IF) Module for MIPS Processor
 module IF (CLK, RST, newPC, PC, W_Ins, WE, nextPC, Ins);
 `include "common_param.vh"
 input CLK, RST, WE;

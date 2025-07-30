@@ -1,3 +1,4 @@
+// Data Memory (DM) Module for MIPS Processor
 module DM (CLK, RST, WE, Adr, WDATA, Rdata);
 `include "common_param.vh"
 input CLK, RST, WE;

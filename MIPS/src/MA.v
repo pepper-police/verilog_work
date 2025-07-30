@@ -1,3 +1,4 @@
+// Memory Access (MA) Module for MIPS Processor
 module MA(CLK, RST, Result, Rdata2, newPC, Ins, Wdata);
 `include "common_param.vh"
 input CLK, RST;

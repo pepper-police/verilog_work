@@ -1,3 +1,4 @@
+// Instruction Memory (IM) Module for MIPS Processor
 module IM (CLK, RST, WE, W_Ins, PC, Ins);
 `include "common_param.vh"
 input CLK, RST, WE;

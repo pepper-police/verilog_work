@@ -1,3 +1,4 @@
+// Execution (EX) Module for MIPS Processor
 module EX (CLK, RST, Ins, Rdata1, Rdata2, Ed32, nextPC, Result, newPC);
 `include "common_param.vh"
 input CLK, RST;
