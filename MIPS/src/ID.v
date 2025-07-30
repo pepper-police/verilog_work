@@ -7,6 +7,15 @@ output reg [31:0] Rdata1, Rdata2, Ed32;
 
 reg[31:0] REGFILE[0:REGFILE_SIZE-1];
 
+integer i;
+initial
+begin
+    for (i = 0; i < REGFILE_SIZE; i = i + 1)
+    begin
+        REGFILE[i] = 32'b0;
+    end
+end
+
 wire[5:0] op, func;
 wire[4:0] Radr1, Radr2, Wadr;
 assign op = Ins[31:26];
