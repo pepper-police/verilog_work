@@ -1,4 +1,5 @@
 module IF (CLK, RST, newPC, PC, W_Ins, WE, nextPC, Ins);
+`include "common_param.vh"
 input CLK, RST, WE;
 input[31:0] newPC, W_Ins;
 output reg[31:0] PC, nextPC, Ins;
@@ -6,7 +7,7 @@ output reg[31:0] PC, nextPC, Ins;
 wire[31:0] im_out;
 
 assign nextPC = PC + 32'd4;
-assign INS = im_out;
+assign Ins = im_out;
 
 always @(posedge CLK)
 begin

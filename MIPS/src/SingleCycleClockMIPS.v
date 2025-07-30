@@ -1,4 +1,4 @@
-module SingleClockMIPS (CLK, RST, W_Ins, WE, PC, Result);
+module SingleCycleClockMIPS (CLK, RST, W_Ins, WE, PC, Result);
 `include "common_param.vh"
   input CLK, RST, WE;
   input [31:0] W_Ins;
