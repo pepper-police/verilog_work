@@ -9,9 +9,10 @@ reg [31:0] HI, LO;
 wire [31:0] MUX2, MUX4, MUX5, alu_res;
 
 wire [5:0] op, func;
-wire [4:0] shamt;
+wire [4:0] shamt, rt;
 wire branch;
 assign op = Ins[31:26];
+assign rt = Ins[20:16];
 assign shamt = Ins[10:6];
 assign func = Ins[5:0];
 
@@ -20,7 +21,8 @@ assign branch = (op == BEQ && alu_res == 0) ||
                 (op == BNE && alu_res != 0) ||
                 (op == BLEZ && $signed(Rdata1) <= 0) ||
                 (op == BGTZ && $signed(Rdata1) > 0) ||
-                (op == BLTZ && $signed(Rdata1) < 0);
+                (op == BLTZ && rt == BLTZ_r && $signed(Rdata1) < 0) ||
+                (op == BGEZ && rt == BGEZ_r && $signed(Rdata1) >= 0);
 assign b_addr = nextPC + (Ed32 << 2); // 分岐先アドレス
 assign MUX2 = op == R_FORM ? Rdata2 : Ed32;
 assign MUX4 = branch ? b_addr : nextPC;

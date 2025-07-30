@@ -3,7 +3,8 @@ module IF (CLK, RST, newPC, PC, W_Ins, WE, nextPC, Ins);
 `include "common_param.vh"
 input CLK, RST, WE;
 input[31:0] newPC, W_Ins;
-output reg[31:0] PC, nextPC, Ins;
+output nextPC;
+output reg[31:0] PC, Ins;
 
 wire[31:0] im_out;
 
@@ -15,7 +16,6 @@ begin
     if (RST)
     begin
         PC <= 32'd0;
-        nextPC <= 32'd0;
         Ins <= 32'd0;
     end
     else
