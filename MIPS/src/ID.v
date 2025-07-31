@@ -3,7 +3,8 @@ module ID (CLK, RST, Ins, Wdata, Rdata1, Rdata2, Ed32);
 `include "common_param.vh"
 input CLK, RST;
 input[31:0] Ins, Wdata;
-output[31:0] Rdata1, Rdata2, Ed32;
+output reg [31:0] Rdata1, Rdata2;
+output [31:0] Ed32;
 
 reg[31:0] REGFILE[0:REGFILE_SIZE-1];
 
@@ -33,8 +34,6 @@ wire WE;
 assign WE = (op == R_FORM && func != JR && func != MTHI && func != MTLO && func != MULT && func != DIV && func != DIVU) ||
             (6'd8 <= op && op <= 6'd15) ||
             (op == LW) || (op == JAL);
-assign Rdata1 = REGFILE[Radr1];
-assign Rdata2 = REGFILE[Radr2];
 
 always @(posedge CLK)
 begin
@@ -43,8 +42,14 @@ begin
         Rdata1 <= 32'd0;
         Rdata2 <= 32'd0;
     end
-    else if (WE)
-        REGFILE[Wadr] <= Wdata;
+    else
+    begin
+        Rdata1 <= REGFILE[Radr1];
+        Rdata2 <= REGFILE[Radr2];
+        
+        if (WE)
+            REGFILE[Wadr] <= Wdata;
+    end
 end
 
 assign Ed32 = ((op == ADDI || op == ADDIU || op == SLTI ||
