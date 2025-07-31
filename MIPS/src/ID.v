@@ -37,19 +37,8 @@ assign WE = (op == R_FORM && func != JR && func != MTHI && func != MTLO && func 
 
 always @(posedge CLK)
 begin
-    if (RST)
-    begin
-        Rdata1 <= 32'd0;
-        Rdata2 <= 32'd0;
-    end
-    else
-    begin
-        Rdata1 <= REGFILE[Radr1];
-        Rdata2 <= REGFILE[Radr2];
-        
-        if (WE)
-            REGFILE[Wadr] <= Wdata;
-    end
+    if (~RST && WE)
+        REGFILE[Wadr] <= Wdata;
 end
 
 assign Ed32 = ((op == ADDI || op == ADDIU || op == SLTI ||
