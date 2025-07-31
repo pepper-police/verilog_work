@@ -9,7 +9,7 @@ reg [31:0] IMem[0:IMEM_SIZE-1];
 
 initial
 begin
-    $readmemb("IMem.txt", IMem);
+    $readmemh("IMem.txt", IMem);
 end
 
 always @(posedge CLK)

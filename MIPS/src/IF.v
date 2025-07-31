@@ -22,6 +22,6 @@ begin
         PC <= newPC;
 end
 
-IM IM0(.CLK(CLK), .RST(RST), .WE(WE), .W_Ins(W_Ins), .Ins(im_out));
+IM IM0(.CLK(CLK), .RST(RST), .WE(WE), .W_Ins(W_Ins), .PC(PC), .Ins(im_out));
 
 endmodule

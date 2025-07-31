@@ -37,39 +37,26 @@ initial begin
     #20;
     RST = 0;
     
-    // 命令メモリへの書き込み（例）
+    // PCを進めるためにnewPCを更新
+    #10;
+    newPC = 32'h4;  // PC=4 (2番目の命令)
+    #10;
+    newPC = 32'h8;  // PC=8 (3番目の命令)
+    #10;
+    newPC = 32'hC;  // PC=12 (4番目の命令)
+    #10;
+    newPC = 32'h10; // PC=16 (5番目の命令)
+    
+    // 命令メモリへの書き込みテスト (オプション)
     #10;
     WE = 1;
-    W_Ins = 32'h20010005; // addi $1, $0, 5
-    newPC = 32'h0;
-    #10;
-    W_Ins = 32'h20020007; // addi $2, $0, 7
-    newPC = 32'h4;
-    #10;
-    W_Ins = 32'h00221820; // add $3, $1, $2
-    newPC = 32'h8;
+    newPC = 32'h20; // アドレス0x20に書き込む
+    W_Ins = 32'hAABBCCDD; // テスト用の命令
     #10;
     WE = 0;
     
-    // 命令フェッチのテスト
-    newPC = 32'h0;
-    #10;
-    $display("PC=%h, nextPC=%h, Ins=%h", PC, nextPC, Ins);
-    newPC = nextPC;
-    
-    #10;
-    $display("PC=%h, nextPC=%h, Ins=%h", PC, nextPC, Ins);
-    newPC = nextPC;
-    
-    #10;
-    $display("PC=%h, nextPC=%h, Ins=%h", PC, nextPC, Ins);
-    
-    // リセットテスト
-    #10;
-    RST = 1;
-    #10;
-    $display("After Reset: PC=%h, nextPC=%h, Ins=%h", PC, nextPC, Ins);
-    
+    #20;
+    $finish; // シミュレーション終了
 end
 
 // モニタリング
