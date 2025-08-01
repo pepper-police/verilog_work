@@ -23,6 +23,8 @@ assign op = Ins[31:26];
 assign func = Ins[5:0];
 assign Radr1 = Ins[25:21];
 assign Radr2 = Ins[20:16];
+assign Rdata1 = REGFILE[Radr1];
+assign Rdata2 = REGFILE[Radr2];
 
 wire[4:0] MUX1;
 assign MUX1 = (op == JAL) ? 5'b11111 : // 2

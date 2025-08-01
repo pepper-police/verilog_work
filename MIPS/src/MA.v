@@ -6,7 +6,7 @@ input[31:0] Result, Rdata2, nextPC, Ins;
 output[31:0] Wdata;
 
 wire WE;
-wire[31:0] dm_out;
+wire[31:0] MUX3, dm_out;
 
 wire [5:0] op, func;
 assign op = Ins[31:26];

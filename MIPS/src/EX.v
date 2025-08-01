@@ -6,7 +6,7 @@ input [31:0] Ins, Rdata1, Rdata2, Ed32, nextPC;
 output [31:0] Result, newPC;
 
 reg [31:0] HI, LO;
-wire [31:0] MUX2, MUX4, MUX5, alu_res;
+wire [31:0] MUX2, MUX4, MUX5, alu_res, b_addr;
 
 wire [5:0] op, func;
 wire [4:0] shamt, rt;
@@ -17,18 +17,18 @@ assign shamt = Ins[10:6];
 assign func = Ins[5:0];
 
 
-assign branch = (op == BEQ && alu_res == 0) ||
-                (op == BNE && alu_res != 0) ||
-                (op == BLEZ && $signed(Rdata1) <= 0) ||
-                (op == BGTZ && $signed(Rdata1) > 0) ||
-                (op == BLTZ && rt == BLTZ_r && $signed(Rdata1) < 0) ||
-                (op == BGEZ && rt == BGEZ_r && $signed(Rdata1) >= 0);
+assign branch = (op == BEQ && alu_res == 32'd0) ||
+                (op == BNE && alu_res != 32'd0) ||
+                (op == BLEZ && $signed(Rdata1) <= 32'd0) ||
+                (op == BGTZ && $signed(Rdata1) > 32'd0) ||
+                (op == BLTZ && rt == BLTZ_r && $signed(Rdata1) < 32'd0) ||
+                (op == BGEZ && rt == BGEZ_r && $signed(Rdata1) >= 32'd0);
 assign b_addr = nextPC + (Ed32 << 2); // 分岐先アドレス
-assign MUX2 = op == R_FORM ? Rdata2 : Ed32;
+assign MUX2 = (op == R_FORM || op == BEQ || op == BNE) ? Rdata2 : Ed32;
 assign MUX4 = branch ? b_addr : nextPC;
 assign MUX5 = (op == R_FORM && (func == JR || func == JALR)) ? Rdata1 : // 3
               (op == J || op == JAL) ? {nextPC[31:28], (Ins[25:0] << 2)} : // 2
-              (op == BLTZ || op == BEQ || op == BNE || op == BLEZ || op == BGTZ) ? MUX4 : // 1
+              (op == BEQ || op == BNE || op == BLEZ || op == BGTZ || (op == BLTZ && rt == BLTZ_r) || (op == BGEZ && rt == BGEZ_r)) ? MUX4 : // 1
               nextPC; // 0
 
 assign alu_res = ALU(op, shamt, func, Rdata1, MUX2, HI, LO);
@@ -93,13 +93,17 @@ case(f_op)
     XORI:
         ALU = f_Rdata1 ^ f_MUX2;
     BEQ:
-        ALU = f_Rdata1 - f_MUX2;
+        ALU = $signed(f_Rdata1) - $signed(f_MUX2);
     BNE:
-        ALU = f_Rdata1 - f_MUX2;
+        ALU = $signed(f_Rdata1) - $signed(f_MUX2);
     BLEZ:
         ALU = f_Rdata1;
     BGTZ:
         ALU = f_Rdata1;
+    LW:
+        ALU = f_Rdata1 + f_MUX2;
+    SW:
+        ALU = f_Rdata1 + f_MUX2;
     default:
         ALU = 32'hxxxxxxxx;
 endcase
