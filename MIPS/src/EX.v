@@ -18,8 +18,8 @@ assign func = Ins[5:0];
 
 assign branch = (op == BEQ && alu_res == 32'd0) ||
                 (op == BNE && alu_res != 32'd0) ||
-                (op == BLEZ && $signed(Rdata1) <= 32'd0) ||
-                (op == BGTZ && $signed(Rdata1) > 32'd0) ||
+                (op == BLEZ && $signed(Rdata1) <= $signed(32'd0)) ||
+                (op == BGTZ && $signed(Rdata1) > $signed(32'd0)) ||
                 (op == BLTZ && rt == BLTZ_r && $signed(Rdata1) < $signed(32'd0)) ||
                 (op == BGEZ && rt == BGEZ_r && $signed(Rdata1) >= $signed(32'd0));
 assign b_addr = nextPC + (Ed32 << 2); // 分岐先アドレス
