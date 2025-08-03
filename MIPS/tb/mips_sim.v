@@ -11,6 +11,7 @@ module tb_SingleCycleClockMIPS;
     // DUT(テスト対象デバイス)からの出力
     wire [31:0] PC;
     wire [31:0] Result;
+    wire [31:0] Wdata;
 
     // DUTのインスタンス化
     SingleCycleClockMIPS uut (
@@ -19,7 +20,8 @@ module tb_SingleCycleClockMIPS;
         .W_Ins(W_Ins),
         .WE(WE),
         .PC(PC),
-        .Result(Result)
+        .Result(Result),
+        .Wdata(Wdata) // WdataはMAモジュールからの出力
     );
 
     // クロック生成 (10ns周期 = 100MHz)
@@ -47,8 +49,8 @@ module tb_SingleCycleClockMIPS;
         #(CLK_PERIOD * 2);
         RST = 1'b0; // リセット解除
 
-        // 800ns (80サイクル) 実行してシミュレーションを終了
-        #800;
+        // 160サイクル実行してシミュレーションを終了
+        #1600;
         $display("Simulation finished.");
         $finish;
     end

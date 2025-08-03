@@ -3,7 +3,7 @@ module ID (CLK, RST, Ins, Wdata, Rdata1, Rdata2, Ed32);
 `include "common_param.vh"
 input CLK, RST;
 input[31:0] Ins, Wdata;
-output reg [31:0] Rdata1, Rdata2;
+output [31:0] Rdata1, Rdata2;
 output [31:0] Ed32;
 
 reg[31:0] REGFILE[0:REGFILE_SIZE-1];
