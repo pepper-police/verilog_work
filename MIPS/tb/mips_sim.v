@@ -1,48 +1,56 @@
-module mips_sim;
+`timescale 1ns / 1ps
 
-// パラメータと信号の定義
-reg CLK;
-reg RST;
-wire [31:0] Result;  // 処理結果の出力
+module tb_SingleCycleClockMIPS;
 
-// テスト対象のMIPSプロセッサをインスタンス化
-SingleCycleClockMIPS mips0 (
-    .CLK(CLK),
-    .RST(RST),
-    .Result(Result)  // 結果の出力（MIPSモジュールの出力に合わせて調整が必要）
-);
+    // テストベンチ用の信号
+    reg CLK;
+    reg RST;
+    reg [31:0] W_Ins; // 今回のテストでは使用しない
+    reg WE;          // 今回のテストでは使用しない
 
-// クロック生成
-initial begin
-    CLK = 0;
-    forever #5 CLK = ~CLK; // 10単位時間の周期
-end
+    // DUT(テスト対象デバイス)からの出力
+    wire [31:0] PC;
+    wire [31:0] Result;
 
-// テストシナリオ
-initial begin
-    // 初期化
-    RST = 1;
-    
-    // リセット解除
-    #20;
-    RST = 0;
-    
-    // プログラムの実行（十分な時間を確保）
-    #1000;
-    
-    $finish; // シミュレーション終了
-end
+    // DUTのインスタンス化
+    SingleCycleClockMIPS uut (
+        .CLK(CLK),
+        .RST(RST),
+        .W_Ins(W_Ins),
+        .WE(WE),
+        .PC(PC),
+        .Result(Result)
+    );
 
-// モニタリング
-initial begin
-    $monitor("Time=%t, CLK=%b, RST=%b, Result=%h",
-             $time, CLK, RST, Result);
-end
+    // クロック生成 (10ns周期 = 100MHz)
+    parameter CLK_PERIOD = 10;
+    always begin
+        CLK = 1'b0;
+        #(CLK_PERIOD / 2);
+        CLK = 1'b1;
+        #(CLK_PERIOD / 2);
+    end
 
-// 命令メモリの内容をダンプ（オプション）
-initial begin
-    $dumpfile("mips_sim.vcd");
-    $dumpvars(0, mips_sim);
-end
+    // シミュレーションの制御
+    initial begin
+        // 初期化とリセット
+        RST = 1'b1; // アクティブハイのリセット
+        WE = 1'b0;
+        W_Ins = 32'b0;
+
+        // コンソールに表示する情報のヘッダ
+        $display("Time\tPC\tInstruction\tALU_Result");
+        // 信号が変化するたびにコンソールに値を表示
+        $monitor("%0t ns\t%08h\t%08h\t%08h", $time, PC, uut.Ins, Result);
+
+        // 2クロック分リセットを維持
+        #(CLK_PERIOD * 2);
+        RST = 1'b0; // リセット解除
+
+        // 800ns (80サイクル) 実行してシミュレーションを終了
+        #800;
+        $display("Simulation finished.");
+        $finish;
+    end
 
 endmodule
