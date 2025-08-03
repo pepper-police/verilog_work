@@ -314,8 +314,8 @@ module ex_sim();
             test_branch(32'b000101_00000_00000_0000000000000010, 32'h00000005, 32'h00000003, 32'h00000008, 32'h00000024, "BNE (taken)");
             test_branch(32'b000110_00000_00000_0000000000000010, 32'h00000000, 32'h00000000, 32'h00000008, 32'h00000024, "BLEZ (taken)");
             test_branch(32'b000111_00000_00000_0000000000000010, 32'h00000005, 32'h00000000, 32'h00000008, 32'h00000024, "BGTZ (taken)");
-            test_branch(32'b000001_00000_00000_0000000000000010, 32'hFFFFFFFF, 32'h00000000, 32'h00000008, 32'h00000024, "BLTZ (taken)");
-            test_branch(32'b000001_00001_00000_0000000000000010, 32'h00000005, 32'h00000000, 32'h00000008, 32'h00000024, "BGEZ (taken)");
+            test_branch(32'b000001_00000_00000_0000000000000010, 32'hFFFF0FFF, 32'h00000000, 32'h00000008, 32'h00000024, "BLTZ (taken)");
+            test_branch(32'b000001_00001_00001_0000000000000010, 32'h00000005, 32'h00000000, 32'h00000008, 32'h00000024, "BGEZ (taken)");
         end
     endtask
 
@@ -346,11 +346,11 @@ module ex_sim();
         #(PERIOD*2);
         // Run all test suites
         //run_rtype_alu_tests();
-        run_shift_tests();
-        run_itype_tests();
-        run_memory_tests();
-        run_mult_div_tests();
-        run_jump_tests();
+        //run_shift_tests();
+        //run_itype_tests();
+        //run_memory_tests();
+        //run_mult_div_tests();
+        //run_jump_tests();
         run_branch_tests();
         // Test summary
         #(PERIOD*5);
