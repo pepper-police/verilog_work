@@ -11,7 +11,6 @@ module tb_SingleCycleClockMIPS;
     // DUT(テスト対象デバイス)からの出力
     wire [31:0] PC;
     wire [31:0] Result;
-    wire [31:0] Wdata;
 
     // DUTのインスタンス化
     SingleCycleClockMIPS uut (
@@ -20,8 +19,7 @@ module tb_SingleCycleClockMIPS;
         .W_Ins(W_Ins),
         .WE(WE),
         .PC(PC),
-        .Result(Result),
-        .Wdata(Wdata) // WdataはMAモジュールからの出力
+        .Result(Result)
     );
 
     // クロック生成 (10ns周期 = 100MHz)
