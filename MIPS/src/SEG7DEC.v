@@ -24,7 +24,7 @@ always @(DIN) begin
     4'b1101: tmp = 8'b10100001; // D
     4'b1110: tmp = 8'b10000110; // E
     4'b1111: tmp = 8'b10001110; // F
-    default: tmp = 8'10111111; // -
+    default: tmp = 8'b10111111; // -
   endcase
 end
 endmodule

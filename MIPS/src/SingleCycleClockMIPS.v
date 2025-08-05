@@ -1,8 +1,8 @@
-module SingleCycleClockMIPS (CLK, RST, W_Ins, WE, PC, Result);
+module SingleCycleClockMIPS (CLK, RST, W_Ins, WE, PC, Result, Rdata1, Rdata2, Wdata, nextPC);
 `include "common_param.vh"
   input CLK, RST, WE;
   input [31:0] W_Ins;
-  output [31:0] PC, Result;
+  output [31:0] PC, Result, Rdata1, Rdata2, Wdata, nextPC;
 
   wire [31:0] newPC, nextPC, Ins;
   wire [31:0] Rdata1, Rdata2, Ed32, Wdata;
