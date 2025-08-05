@@ -43,7 +43,7 @@ begin
         REGFILE[Wadr] <= Wdata;
 end
 
-assign Ed32 = ((op == ADDI || op == ADDIU || op == SLTI ||
+assign Ed32 = ((op == BEQ || op == BNE || op == SW || op == LW || op == ADDI || op == ADDIU || op == SLTI ||
                 op == ANDI || op == ORI || op == XORI) && Ins[15] == 1'b1) ? {16'b1111111111111111, Ins[15:0]} :
                 {16'b0000000000000000, Ins[15:0]};
 

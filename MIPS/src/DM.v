@@ -7,12 +7,12 @@ output[31:0] Rdata;
 
 reg [31:0] DMem[0:DMEM_SIZE-1];
 
-assign Rdata = DMem[Adr>>2];
+assign Rdata = DMem[Adr[6:0]];
 
 always @(posedge CLK)
 begin
     if (~RST && WE)
-        DMem[Adr>>2] <= WDATA;
+        DMem[Adr[6:0]] <= WDATA;
 end
 
 endmodule

@@ -100,9 +100,9 @@ case(f_op)
     BGTZ:
         ALU = f_Rdata1;
     LW:
-        ALU = f_Rdata1 + f_MUX2;
+        ALU = ($signed(f_Rdata1) + $signed(f_MUX2)) >>> 2;
     SW:
-        ALU = f_Rdata1 + f_MUX2;
+        ALU = ($signed(f_Rdata1) + $signed(f_MUX2)) >>> 2;
     default:
         ALU = 32'hxxxxxxxx;
 endcase
