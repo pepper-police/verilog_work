@@ -129,7 +129,7 @@ module DE10_LITE_Golden_Top(
 wire [1:0] keyout;
 wire [9:0] swout;
 wire myCLK = keyout[0];
-wire rst = SW[9];
+wire rst = swout[9];
 
 wire [31:0] pc, rdata1, rdata2, result, wdata, nextpc, newpc, vdata;
 wire [5:0] sel_led;

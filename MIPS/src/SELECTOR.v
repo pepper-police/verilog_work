@@ -4,7 +4,7 @@ module SELECTOR (Rdata1, Rdata2, Result, SEL, Wdata, NextPC, newPC, SEL_LED, Vda
   output [5:0] SEL_LED;
   output [31:0] Vdata;
 
-  wire [4:0] SEL_LED = (SEL == 3'd0) ? 6'b000001 : // Rdata1
+  wire [5:0] SEL_LED = (SEL == 3'd0) ? 6'b000001 : // Rdata1
                        (SEL == 3'd1) ? 6'b000010 : // Rdata2
                        (SEL == 3'd2) ? 6'b000100 : // Result
                        (SEL == 3'd3) ? 6'b001000 : // Wdata
