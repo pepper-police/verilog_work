@@ -131,8 +131,8 @@ wire [9:0] swout;
 wire myCLK = keyout[0];
 wire rst = SW[9];
 
-wire [31:0] pc, rdata1, rdata2, result, wdata, nextpc, vdata;
-wire [4:0] sel_led;
+wire [31:0] pc, rdata1, rdata2, result, wdata, nextpc, newpc, vdata;
+wire [5:0] sel_led;
 
 //=======================================================
 //  Structural coding
@@ -157,7 +157,8 @@ SingleCycleClockMIPS SCCM0 (
   .Rdata1(rdata1),
   .Rdata2(rdata2),
   .Wdata(wdata),
-  .nextPC(nextpc)
+  .nextPC(nextpc),
+  .newPC(newpc)
 );
 
 SELECTOR SEL0 (
@@ -167,6 +168,7 @@ SELECTOR SEL0 (
   .Result(result),
   .Wdata(wdata), 
   .NextPC(nextpc),
+  .newPC(newpc),
   .SEL_LED(sel_led),
   .Vdata(vdata)
 );
@@ -211,6 +213,6 @@ SEG7DEC PC01 (
   .nHEX(HEX5)
 );
 
-assign LEDR[9:0] = {5'b0, sel_led};
+assign LEDR[9:0] = {4'b0, sel_led};
 
 endmodule
