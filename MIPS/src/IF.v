@@ -11,9 +11,9 @@ wire[31:0] im_out;
 assign nextPC = PC + 32'd4;
 assign Ins = im_out;
 
-always @(posedge CLK)
+always @(posedge CLK or posedge RST)
 begin
-    if (RST)
+    if (RST == 1'b1)
         PC <= 32'd0;
     else
         PC <= newPC;
