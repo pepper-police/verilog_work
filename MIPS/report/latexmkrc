@@ -1,0 +1,17 @@
+# LaTeX processing configuration
+$latex = 'uplatex -interaction=nonstopmode -synctex=1 %O %S';
+$bibtex = 'pbibtex %O %B';
+$dvipdf = 'dvipdfmx %O -o %D %S';
+$makeindex = 'mendex %O -o %D %S';
+#$latex = 'platex';
+#$bibtex = 'pbibtex';
+#$dvipdf = 'dvipdfmx %O -o %D %S';
+
+# Clean up auxiliary files after compilation
+$clean_ext = 'nav snm log aux dvi fls fdb_latexmk bbl blg synctex.gz';
+
+# Compilation settings
+$bibtex_use = 2;  # Automatically run bibtex if needed
+$pdf_mode = 1;    # Use PDF mode
+$preview_mode = 0;
+$max_repeat = 5;  # Allow up to 5 repetitions
