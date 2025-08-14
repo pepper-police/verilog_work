@@ -2,7 +2,6 @@
 
 .global _start
 _start:
-	addi $7, 0
 	lw	$s0, 0($s7)
 	lw	$s1, 4($s7)
 	addi $t0, $s7, 8

@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 
-module tb_SingleCycleClockMIPS;
+module mips_sim;
 
     // テストベンチ用の信号
     reg CLK;
@@ -41,7 +41,7 @@ module tb_SingleCycleClockMIPS;
         // コンソールに表示する情報のヘッダ
         $display("Time\tPC\tInstruction\tALU_Result");
         // 信号が変化するたびにコンソールに値を表示
-        $monitor("%0t ns\t%08h\t%08h\t%08h", $time, PC, uut.Ins, Result);
+        $monitor("%0t ns\t0x%08h\t0b%32b\t0x%08h", $time, PC, uut.Ins, Result);
 
         // 2クロック分リセットを維持
         #(CLK_PERIOD * 2);
