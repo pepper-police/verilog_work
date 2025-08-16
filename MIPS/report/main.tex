@@ -61,9 +61,10 @@ QuartusのRTL Viewerを用いて出力した，DE10-liteに書き込んだモジ
 
 \section{動作検証}
 作成したverilogコードがMIPSの命令セットを実行できるかどうかの検証を行った．
-教科書\cite{textbook}に掲載されているアセンブラプログラム（load\_store, arithmetic, array, if\_then\_else, while, function, recursion, hanoi）を\texttt{IMem.txt}に書き込んでおき，IMに読み込ませ，modelsimを用いて動作のシミュレーションを行った．
+テストプログラムとして，教科書\cite{textbook}に掲載されているアセンブラプログラム（load\_store, arithmetic, array, if\_then\_else, while, function, recursion, hanoi）を用いた．
+プログラムはCPUlator MIPS System Simulator \cite{mips-sim}を用いてコンパイルし，32bitの16進数で出力されたバイナリを\texttt{IMem.txt}に書き込んでおき，IMに読み込ませて実行した．
+動作の流れとデータメモリの中身を確認するため，modelsim20.1を用いて動作のシミュレーションと検証を行った．
 シミュレーション結果は，display命令を用いて，PC, Instruction, ALU\_resultレジスタの内容を表示することで確認した．
-シミュレーションには，modelsim 20.1を使用した．
 シミュレーションの様子を図\ref{fig:simulation}に示す．
 
 \begin{figure}[h]
@@ -77,6 +78,9 @@ QuartusのRTL Viewerを用いて出力した，DE10-liteに書き込んだモジ
 \subsubsection{load\_storeのテスト結果}
 \verbatiminput{test-results/load_store.txt}
 \subsection{test: arithmetic}
+あらかじめてすとべ
+\subsubsection{arithmeticのテスト結果}
+\verbatiminput{test-results/arithmetic.txt}
 \subsection{test: array}
 \subsection{test: if\_then\_else}
 \subsection{test: while}

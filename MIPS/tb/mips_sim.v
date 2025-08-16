@@ -38,6 +38,15 @@ module mips_sim;
         WE = 1'b0;
         W_Ins = 32'b0;
 
+        uut.ID0.REGFILE[23] = 32'h00000000;
+
+        // Dmemに初期値を書き込む
+        uut.MA0.DM0.DMem[0] = 32'h00000001; 
+        uut.MA0.DM0.DMem[1] = 32'h00000002;
+        uut.MA0.DM0.DMem[2] = 32'h00000003;
+        uut.MA0.DM0.DMem[3] = 32'h00000000;
+
+
         // コンソールに表示する情報のヘッダ
         $display("Time\tPC\tInstruction\tALU_Result");
         // 信号が変化するたびにコンソールに値を表示
@@ -49,6 +58,8 @@ module mips_sim;
 
         // 160サイクル実行してシミュレーションを終了
         #1600;
+        $display("==== Simulation Results ====");
+        $display("$s3 register (R19) final value: 0x%08h", uut.ID0.REGFILE[19]);
         $display("Simulation finished.");
         $finish;
     end
