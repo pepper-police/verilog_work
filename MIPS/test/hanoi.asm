@@ -1,16 +1,17 @@
+.set noreorder
+
 .global _start
 _start:
     # init
-    addi	$a0, $zero, 3			# $a0 = $zero + 3
-    addi	$a1, $zero, 3			# $a1 = $zero + 3
-    addi	$a2, $zero, 0			# $a2 = $zero + 0
-    addi    $a3, $zero, 0           # $a3 = $zero + 0
+    addi	$a0, $zero, 3			# $a0 = $zero + 3, n
+    addi	$a1, $zero, 3			# $a1 = $zero + 1, from
+    addi	$a2, $zero, 0			# $a2 = $zero + 2, to
+    addi    $a3, $zero, 0           # $a3 = $zero + 0, aux
     # call
     jal		hanoi				# jump to hanoi and save position to $ra
 
 loop:
     j		loop				# jump to loop
-
 hanoi:
     addi	$sp, $sp, -20			# $sp = $sp + -20
     sw		$a0, 0($sp)

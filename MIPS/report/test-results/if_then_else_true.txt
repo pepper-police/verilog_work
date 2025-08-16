@@ -1,0 +1,10 @@
+run -all
+# Time	PC	Instruction	ALU_Result
+# 0 ns	0x00000000	0b00010010000100010000000000000010	0x00000000
+# 25000 ns	0x0000000c	0b00000000000100011001000000100000	0x0000000a
+# 35000 ns	0x00000010	0b00001000000000000000000000000100	0xxxxxxxxx
+# ==== Simulation Results ====
+# $s0 register (R16) final value: 0x0000000a
+# $s1 register (R17) final value: 0x0000000a
+# $s2 register (R18) final value: 0x0000000a
+# Simulation finished.
