@@ -114,7 +114,7 @@ QuartusのRTL Viewerを用いて出力した，DE10-liteに書き込んだモジ
 
 \subsection{test: function}
 \label{sec:function}
-あらかじめテストベンチでレジスタ\$s0=10を初期値として設定してシミュレーションを実行した．
+あらかじめテストベンチでレジスタ\$s0=10を初期値として設定して1からnまでの和を求めるプログラムのシミュレーションを実行した．
 その結果，\$s1=0x37=0d55となることを確認した．
 \subsubsection{functionのテスト結果}
 \verbatiminput{test-results/function.txt}
@@ -126,10 +126,13 @@ QuartusのRTL Viewerを用いて出力した，DE10-liteに書き込んだモジ
 \verbatiminput{test-results/recursion.txt}
 
 \subsection{test: hanoi}
-
+円盤が3枚のハノイの塔を解くプログラムを実行する．
+レジスタ\$t1を移動回数カウント用としてシミュレーションを行った．
+結果，\$t1=7となり，期待通りの動作を確認した．
+\subsubsection{hanoiのテスト結果}
+\verbatiminput{test-results/hanoi.txt}
 hanoiのテストは上記のテストほとんどすべての処理を含むため，Quartus Primeを用いてDE10-Liteに書き込んで実行した．
-その結果，同様に期待通りの動作を確認できた．
-
+その結果，modelsim同様に期待通りの動作を確認できた．
 
 
 

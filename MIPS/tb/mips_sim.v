@@ -38,13 +38,27 @@ module mips_sim;
         WE = 1'b0;
         W_Ins = 32'b0;
 
-        uut.ID0.REGFILE[23] = 32'h00000000;
+        uut.ID0.REGFILE[23] = 32'h00000000; // $s7 レジスタを初期化
+        uut.ID0.REGFILE[16] = 32'h0000000a; // $s0 レジスタを初期化
+        uut.ID0.REGFILE[17] = 32'h0000000b; // $s1 レジスタを初期化
+        uut.ID0.REGFILE[18] = 32'h00000000; // $s2 レジスタを初期化
+
 
         // Dmemに初期値を書き込む
-        uut.MA0.DM0.DMem[0] = 32'h00000001; 
-        uut.MA0.DM0.DMem[1] = 32'h00000002;
-        uut.MA0.DM0.DMem[2] = 32'h00000003;
-        uut.MA0.DM0.DMem[3] = 32'h00000000;
+        //uut.MA0.DM0.DMem[0] = 32'h00000001; 
+        //uut.MA0.DM0.DMem[1] = 32'h00000002;
+        //uut.MA0.DM0.DMem[2] = 32'h00000003;
+        //uut.MA0.DM0.DMem[3] = 32'h00000000;
+        //uut.MA0.DM0.DMem[0] = 32'h00000000;
+        //uut.MA0.DM0.DMem[1] = 32'h00000001;
+        //uut.MA0.DM0.DMem[2] = 32'h00000002;
+        //uut.MA0.DM0.DMem[3] = 32'h00000003;
+        //uut.MA0.DM0.DMem[4] = 32'h00000004;
+        //uut.MA0.DM0.DMem[5] = 32'h00000005;
+        //uut.MA0.DM0.DMem[6] = 32'h00000006;
+        //uut.MA0.DM0.DMem[7] = 32'h00000007;
+        //uut.MA0.DM0.DMem[8] = 32'h00000008;
+        //uut.MA0.DM0.DMem[9] = 32'h00000009;
 
 
         // コンソールに表示する情報のヘッダ
@@ -59,7 +73,20 @@ module mips_sim;
         // 160サイクル実行してシミュレーションを終了
         #1600;
         $display("==== Simulation Results ====");
-        $display("$s3 register (R19) final value: 0x%08h", uut.ID0.REGFILE[19]);
+        //$display("$s0 register (R16) final value: 0x%08h", uut.ID0.REGFILE[16]);
+        //$display("$s1 register (R17) final value: 0x%08h", uut.ID0.REGFILE[17]);
+        //$display("$s3 register (R19) final value: 0x%08h", uut.ID0.REGFILE[19]);
+        $display("$t1 register (R9) final value: 0x%08h", uut.ID0.REGFILE[9]);
+        //$display("REGFILE[0]: 0x%08h", uut.MA0.DM0.DMem[0]);
+        //$display("REGFILE[1]: 0x%08h", uut.MA0.DM0.DMem[1]);
+        //$display("REGFILE[2]: 0x%08h", uut.MA0.DM0.DMem[2]);
+        //$display("REGFILE[3]: 0x%08h", uut.MA0.DM0.DMem[3]);
+        //$display("REGFILE[4]: 0x%08h", uut.MA0.DM0.DMem[4]);
+        //$display("REGFILE[5]: 0x%08h", uut.MA0.DM0.DMem[5]);
+        //$display("REGFILE[6]: 0x%08h", uut.MA0.DM0.DMem[6]);
+        //$display("REGFILE[7]: 0x%08h", uut.MA0.DM0.DMem[7]);
+        //$display("REGFILE[8]: 0x%08h", uut.MA0.DM0.DMem[8]);
+        //$display("REGFILE[9]: 0x%08h", uut.MA0.DM0.DMem[9]);
         $display("Simulation finished.");
         $finish;
     end
