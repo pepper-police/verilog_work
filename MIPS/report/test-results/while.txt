@@ -74,14 +74,15 @@ run -all
 # 725000 ns	0x00000004	0b00010001000000000000000000000101	0x00000000
 # 735000 ns	0x0000001c	0b00001000000000000000000000000111	0xxxxxxxxx
 # ==== Simulation Results ====
-# REGFILE[0]: 0x00000000
-# REGFILE[1]: 0x00000001
-# REGFILE[2]: 0x00000002
-# REGFILE[3]: 0x00000003
-# REGFILE[4]: 0x00000004
-# REGFILE[5]: 0x00000005
-# REGFILE[6]: 0x00000006
-# REGFILE[7]: 0x00000007
-# REGFILE[8]: 0x00000008
-# REGFILE[9]: 0x00000009
+# $s0 register (R16) final value: 0x0000000a
+# DMem[0] final value: 0x00000000
+# DMem[1] final value: 0x00000001
+# DMem[2] final value: 0x00000002
+# DMem[3] final value: 0x00000003
+# DMem[4] final value: 0x00000004
+# DMem[5] final value: 0x00000005
+# DMem[6] final value: 0x00000006
+# DMem[7] final value: 0x00000007
+# DMem[8] final value: 0x00000008
+# DMem[9] final value: 0x00000009
 # Simulation finished.

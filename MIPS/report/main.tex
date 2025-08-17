@@ -77,17 +77,51 @@ QuartusのRTL Viewerを用いて出力した，DE10-liteに書き込んだモジ
 \end{figure}
 
 \subsection{test: load\_store}
-基本的なロードストア命令の動作確認を行った．使用したアセンブリコードは付録\ref{appendix:load_store_asm}に示す．詳細なテスト結果は付録\ref{appendix:load_store}に示す．
+基本的なロード・ストア命令の動作確認を行った．このプログラムではデータメモリから値をロードし、別のアドレスにストアする処理を行う．
+プログラムの動作は以下の通りである：
+\begin{itemize}
+\item \texttt{lw \$s0, 0(\$s7)}: データメモリのアドレス\texttt{\$s7+0}から値をロードし、\texttt{\$s0}に格納
+\item \texttt{lw \$s1, 4(\$s7)}: データメモリのアドレス\texttt{\$s7+4}から値をロードし、\texttt{\$s1}に格納  
+\item \texttt{addi \$t0, \$s7, 8}: \texttt{\$s7+8}をアドレスとして\texttt{\$t0}に計算
+\item \texttt{sw \$s1, 0(\$t0)}: \texttt{\$s1}の値を\texttt{\$t0}が示すアドレスにストア
+\end{itemize}
+あらかじめテストベンチでDMemの0番地からそれぞれ静的変数a=10，b=20と，配列a[0]=0，配列のオフセットを保持するレジスタ\$s7=0を初期値として設定してシミュレーションを実行した．
+その結果，期待通り\$s0=10, \$s1=20, DMem[0]=10であることを確認した．
+使用したアセンブリコードとそのテスト結果を付録\ref{appendix:load_store}に示す．
 
 \subsection{test: arithmetic}
-あらかじめテストベンチでDMemの0番地からそれぞれ変数a=1,b=2,c=3,d=0と変数のオフセットを保持するレジスタ\$s7=0を初期値として設定してシミュレーションを実行した．
-その結果，期待通りa, b, cの値がadd命令で足し合わされ，\$s3=6であることを確認した．使用したアセンブリコードは付録\ref{appendix:arithmetic_asm}に示す．詳細なテスト結果は付録\ref{appendix:arithmetic}に示す．
+基本的な算術演算命令の動作を確認するためのテストを行った．このプログラムは3つの値を読み込んで加算を行い、結果をレジスタに格納する．
+プログラムの動作は以下の通りである：
+\begin{itemize}
+\item 変数a, b, cの値（1, 2, 3）をそれぞれ\texttt{\$s0}, \texttt{\$s1}, \texttt{\$s2}にロード
+\item \texttt{add \$t0, \$s0, \$s1}: a + b の結果を\texttt{\$t0}に格納
+\item \texttt{add \$s3, \$t0, \$s2}: (a + b) + c の結果を\texttt{\$s3}に格納（期待値：6）
+\end{itemize}
+あらかじめテストベンチでDMemの0番地からそれぞれ静的変数a=1,b=2,c=3,d=0と変数のオフセットを保持するレジスタ\$s7=0を初期値として設定してシミュレーションを実行した．
+その結果，期待通りa, b, cの値がadd命令で足し合わされ，\$s3=6であることを確認した．
+使用したアセンブリコードとそのテスト結果を付録\ref{appendix:arithmetic}に示す．
 
 \subsection{test: array}
-あらかじめテストベンチでDMemの0番地からそれぞれ配列a[0]=0, a[1]=1..., a[9]=9と配列のオフセットを保持するレジスタ\$s7=0と\$s2=2を初期値として設定してシミュレーションを実行した．
-その結果，期待通り\$s1=2, \$s2=5であることを確認した．使用したアセンブリコードは付録\ref{appendix:array_asm}に示す．詳細なテスト結果は付録\ref{appendix:array}に示す．
+配列のアクセスとインデックス計算の動作を確認するためのテストを行った．
+プログラムの動作は以下の通りである：
+\begin{itemize}
+\item \texttt{sll \$t0, \$s0, 2}: インデックス\texttt{\$s0}を4倍（左シフト2ビット）してワードアドレスに変換
+\item \texttt{add \$t0, \$s7, \$t0}: 配列の基底アドレス\texttt{\$s7}にオフセットを加算
+\item \texttt{lw \$s1, 0(\$t0)}: 計算されたアドレスから配列要素をロード
+\item \texttt{lw \$s2, 20(\$s7)}: 配列の5番目の要素（20バイトオフセット）をロード
+\end{itemize}
+あらかじめテストベンチでDMemの0番地からそれぞれ配列a[0]=0, a[1]=1, ..., a[9]=9と配列のオフセットを保持するレジスタ\$s7=0と\$s2=2を初期値として設定してシミュレーションを実行した．
+その結果，期待通り\$s1=2, \$s2=5であることを確認した．
+使用したアセンブリコードとそのテスト結果を付録\ref{appendix:array}に示す．
 
 \subsection{test: if\_then\_else}
+条件分岐命令の動作を確認するためのテストを行った．
+プログラムの動作は以下の通りである：
+\begin{itemize}
+\item \texttt{beq \$s0, \$s1, L1}: \texttt{\$s0}と\texttt{\$s1}が等しい場合はL1にジャンプ
+\item 等しくない場合：\texttt{\$s2 = \$s0}を実行してN1にジャンプ
+\item 等しい場合（L1）：\texttt{\$s2 = \$s1}を実行
+\end{itemize}
 まず，if文が真になる場合のテストを行った．
 あらかじめテストベンチでレジスタ\$s0=0xa, \$s1=0xa, \$s2=0x0を初期値として設定してシミュレーションを実行した．
 その結果，\$s0と\$s1が等しいため，\$s2に\$s1の値が代入され，\$s2=0xaであることを確認した．
@@ -95,27 +129,57 @@ QuartusのRTL Viewerを用いて出力した，DE10-liteに書き込んだモジ
 あらかじめテストベンチでレジスタ\$s0=0xa, \$s1=0xb, \$s2=0x0を初期値として設定してシミュレーションを実行した．
 その結果，\$s0と\$s1が等しくないため，\$s2に\$s0の値が代入され，\$s2=0xaであることを確認した．
 真の場合と偽の場合のPCの遷移を比べると，偽の場合はelse節のラベルを飛び越えるためにJ命令が実行されているためことがわかる．
-そのため偽の場合は1命令多い．使用したアセンブリコードは付録\ref{appendix:if_then_else_asm}に示す．詳細なテスト結果は付録\ref{appendix:if_then_else}に示す．
+そのため偽の場合は1命令多い．使用したアセンブリコードとそのテスト結果を付録\ref{appendix:if_then_else}に示す．
 
 \subsection{test: while}
+ループ処理と条件判定の動作を確認するためのテストを行った．
+プログラムの動作は以下の通りである：
+\begin{itemize}
+\item \texttt{slti \$t0, \$s0, 10}: \texttt{\$s0 < 10}の条件判定結果を\texttt{\$t0}に格納
+\item 条件が偽（\texttt{\$s0 >= 10}）の場合はループを終了してN1にジャンプ
+\item 条件が真の場合：配列に\texttt{\$s0}の値を格納し、\texttt{\$s0}をインクリメントしてループを継続
+\end{itemize}
 あらかじめテストベンチで配列a[10]を0で初期化し，配列のオフセットを保持するレジスタ\$s7=0, \$s0=0を初期値として設定してシミュレーションを実行した．
-その結果，\$s0が10になるまでwhile文が繰り返され，配列a[0]からa[9]にそれぞれ0から9までの値が代入されていることを確認した．使用したアセンブリコードは付録\ref{appendix:while_asm}に示す．詳細なテスト結果は付録\ref{appendix:while}に示す．
+その結果，\$s0が10になるまでwhile文が繰り返され，配列a[0]からa[9]にそれぞれ0から9までの値が代入されていることを確認した．使用したアセンブリコードとそのテスト結果を付録\ref{appendix:while}に示す．
 
 \subsection{test: function}
 \label{sec:function}
+関数呼び出しとスタック操作の動作を確認するためのテストを行った．このプログラムは1からnまでの和を計算する関数を実装している．
+プログラムの動作は以下の通りである：
+\begin{itemize}
+\item メイン部分：引数を\texttt{\$a0}に設定してsum関数を呼び出し、戻り値を\texttt{\$s1}に格納
+\item sum関数：スタックにレジスタを退避し、1からnまでの和を計算して\texttt{\$v0}に結果を返す
+\item 関数終了時にはスタックからレジスタを復元し、呼び出し元に戻る
+\end{itemize}
 あらかじめテストベンチでレジスタ\$s0=10を初期値として設定して1からnまでの和を求めるプログラムのシミュレーションを実行した．
-その結果，\$s1=0x37=0d55となることを確認した．使用したアセンブリコードは付録\ref{appendix:function_asm}に示す．詳細なテスト結果は付録\ref{appendix:function}に示す．
+その結果，\$s1=0x37=0d55となることを確認した．使用したアセンブリコードとそのテスト結果を付録\ref{appendix:function}に示す．
 
 \subsection{test: recursion}
+再帰関数呼び出しの動作を確認するためのテストを行った．このプログラムは再帰を用いて1からnまでの和を計算する．
+プログラムの動作は以下の通りである：
+\begin{itemize}
+\item 引数が1未満の場合は0を返してベースケースとする
+\item 引数が1以上の場合は、引数を1減らして再帰呼び出しを行い、その結果に現在の引数値を加算
+\item 各再帰レベルでスタックに引数と戻りアドレスを保存・復元
+\end{itemize}
 \ref{sec:function}のテストと同様に，あらかじめテストベンチでレジスタ\$s0=10を初期値として設定してシミュレーションを実行した．
-その結果，\$s1=0x37=0d55となることを確認した．使用したアセンブリコードは付録\ref{appendix:recursion_asm}に示す．詳細なテスト結果は付録\ref{appendix:recursion}に示す．
+その結果，\$s1=0x37=0d55となることを確認した．使用したアセンブリコードとそのテスト結果を付録\ref{appendix:recursion}に示す．
 
 \subsection{test: hanoi}
+ハノイの塔を解く再帰アルゴリズムを実装し、複雑な再帰処理の動作を確認するためのテストを行った．
+プログラムの動作は以下の通りである：
+\begin{itemize}
+\item 3枚の円盤のハノイの塔問題を解く
+\item \texttt{\$a0}: 円盤の枚数、\texttt{\$a1}: 移動元、\texttt{\$a2}: 移動先、\texttt{\$a3}: 補助杆
+\item \texttt{\$t1}: 移動回数カウンタ（期待値：7回）
+\item 再帰の深さに応じてスタックに多くの引数と戻りアドレスを保存
+\item ベースケース（円盤が1枚）では直接移動を実行
+\end{itemize}
 円盤が3枚のハノイの塔を解くプログラムを実行する．
 レジスタ\$t1を移動回数カウント用としてシミュレーションを行った．
 結果，\$t1=7となり，期待通りの動作を確認した．
 hanoiのテストは算術演算，関数呼び出しなど，上記の多くの処理を含むため，Quartus Primeを用いてDE10-Liteに書き込んで実行した．
-その結果，modelsim同様に期待通りの動作をし，最後の無限ループの処理まで到達することを確認できた．使用したアセンブリコードは付録\ref{appendix:hanoi_asm}に示す．詳細なテスト結果は付録\ref{appendix:hanoi}に示す．
+その結果，modelsim同様に期待通りの動作をし，最後の無限ループの処理まで到達することを確認できた．使用したアセンブリコードとそのテスト結果を付録\ref{appendix:hanoi}に示す．
 
 
 
@@ -130,12 +194,15 @@ hanoiのテストは算術演算，関数呼び出しなど，上記の多くの
 \appendix
 \section{テストプログラム}
 
-本節では、各テストプログラムのアセンブリコードとその動作について説明する。
+本節では、各テストプログラムのアセンブリコードとその動作、および実行結果について説明する。
 
-\subsection{load\_storeプログラム}
-\label{appendix:load_store_asm}
+\subsection{load\_store}
+\label{appendix:load_store}
+
+\subsubsection{プログラム}
 このプログラムは基本的なロード・ストア命令の動作を確認するためのテストである。
 プログラムでは、データメモリから値をロードし、別のアドレスにストアする処理を行う。
+
 \verbatiminput{test-results/load_store.asm}
 
 \textbf{プログラムの動作：}
@@ -146,8 +213,13 @@ hanoiのテストは算術演算，関数呼び出しなど，上記の多くの
 \item \texttt{sw \$s1, 0(\$t0)}: \texttt{\$s1}の値を\texttt{\$t0}が示すアドレスにストア
 \end{itemize}
 
-\subsection{arithmeticプログラム}
-\label{appendix:arithmetic_asm}
+\subsubsection{テスト結果}
+\verbatiminput{test-results/load_store.txt}
+
+\subsection{arithmetic}
+\label{appendix:arithmetic}
+
+\subsubsection{プログラム}
 このプログラムは基本的な算術演算命令の動作を確認するためのテストである。
 3つの値を読み込んで加算を行い、結果をレジスタに格納する。
 
@@ -160,8 +232,13 @@ hanoiのテストは算術演算，関数呼び出しなど，上記の多くの
 \item \texttt{add \$s3, \$t0, \$s2}: (a + b) + c の結果を\texttt{\$s3}に格納（期待値：6）
 \end{itemize}
 
-\subsection{arrayプログラム}
-\label{appendix:array_asm}
+\subsubsection{テスト結果}
+\verbatiminput{test-results/arithmetic.txt}
+
+\subsection{array}
+\label{appendix:array}
+
+\subsubsection{プログラム}
 このプログラムは配列のアクセスとインデックス計算の動作を確認するためのテストである。
 
 \verbatiminput{test-results/array.asm}
@@ -174,8 +251,13 @@ hanoiのテストは算術演算，関数呼び出しなど，上記の多くの
 \item \texttt{lw \$s2, 20(\$s7)}: 配列の5番目の要素（20バイトオフセット）をロード
 \end{itemize}
 
-\subsection{if\_then\_elseプログラム}
-\label{appendix:if_then_else_asm}
+\subsubsection{テスト結果}
+\verbatiminput{test-results/array.txt}
+
+\subsection{if\_then\_else}
+\label{appendix:if_then_else}
+
+\subsubsection{プログラム}
 このプログラムは条件分岐命令の動作を確認するためのテストである。
 
 \verbatiminput{test-results/if_then_else.asm}
@@ -187,8 +269,16 @@ hanoiのテストは算術演算，関数呼び出しなど，上記の多くの
 \item 等しい場合（L1）：\texttt{\$s2 = \$s1}を実行
 \end{itemize}
 
-\subsection{whileプログラム}
-\label{appendix:while_asm}
+\subsubsection{テスト結果（真の場合）}
+\verbatiminput{test-results/if_then_else_true.txt}
+
+\subsubsection{テスト結果（偽の場合）}
+\verbatiminput{test-results/if_then_else_false.txt}
+
+\subsection{while}
+\label{appendix:while}
+
+\subsubsection{プログラム}
 このプログラムはループ処理と条件判定の動作を確認するためのテストである。
 
 \verbatiminput{test-results/while.asm}
@@ -200,8 +290,13 @@ hanoiのテストは算術演算，関数呼び出しなど，上記の多くの
 \item 条件が真の場合：配列に\texttt{\$s0}の値を格納し、\texttt{\$s0}をインクリメントしてループを継続
 \end{itemize}
 
-\subsection{functionプログラム}
-\label{appendix:function_asm}
+\subsubsection{テスト結果}
+\verbatiminput{test-results/while.txt}
+
+\subsection{function}
+\label{appendix:function}
+
+\subsubsection{プログラム}
 このプログラムは関数呼び出しとスタック操作の動作を確認するためのテストである。
 1からnまでの和を計算する関数を実装している。
 
@@ -214,8 +309,13 @@ hanoiのテストは算術演算，関数呼び出しなど，上記の多くの
 \item 関数終了時にはスタックからレジスタを復元し、呼び出し元に戻る
 \end{itemize}
 
-\subsection{recursionプログラム}
-\label{appendix:recursion_asm}
+\subsubsection{テスト結果}
+\verbatiminput{test-results/function.txt}
+
+\subsection{recursion}
+\label{appendix:recursion}
+
+\subsubsection{プログラム}
 このプログラムは再帰関数呼び出しの動作を確認するためのテストである。
 再帰を用いて1からnまでの和を計算する。
 
@@ -228,8 +328,13 @@ hanoiのテストは算術演算，関数呼び出しなど，上記の多くの
 \item 各再帰レベルでスタックに引数と戻りアドレスを保存・復元
 \end{itemize}
 
-\subsection{hanoiプログラム}
-\label{appendix:hanoi_asm}
+\subsubsection{テスト結果}
+\verbatiminput{test-results/recursion.txt}
+
+\subsection{hanoi}
+\label{appendix:hanoi}
+
+\subsubsection{プログラム}
 このプログラムはハノイの塔を解く再帰アルゴリズムを実装し、複雑な再帰処理の動作を確認するためのテストである。
 
 \verbatiminput{test-results/hanoi.asm}
@@ -243,41 +348,7 @@ hanoiのテストは算術演算，関数呼び出しなど，上記の多くの
 \item ベースケース（円盤が1枚）では直接移動を実行
 \end{itemize}
 
-\section{テスト結果詳細}
-
-\subsection{load\_storeのテスト結果}
-\label{appendix:load_store}
-\verbatiminput{test-results/load_store.txt}
-
-\subsection{arithmeticのテスト結果}
-\label{appendix:arithmetic}
-\verbatiminput{test-results/arithmetic.txt}
-
-\subsection{arrayのテスト結果}
-\label{appendix:array}
-\verbatiminput{test-results/array.txt}
-
-\subsection{if\_then\_elseのテスト結果(真の場合)}
-\label{appendix:if_then_else}
-\verbatiminput{test-results/if_then_else_true.txt}
-
-\subsubsection{if\_then\_elseのテスト結果(偽の場合)}
-\verbatiminput{test-results/if_then_else_false.txt}
-
-\subsection{whileのテスト結果}
-\label{appendix:while}
-\verbatiminput{test-results/while.txt}
-
-\subsection{functionのテスト結果}
-\label{appendix:function}
-\verbatiminput{test-results/function.txt}
-
-\subsection{recursionのテスト結果}
-\label{appendix:recursion}
-\verbatiminput{test-results/recursion.txt}
-
-\subsection{hanoiのテスト結果}
-\label{appendix:hanoi}
+\subsubsection{テスト結果}
 \verbatiminput{test-results/hanoi.txt}
 
 
