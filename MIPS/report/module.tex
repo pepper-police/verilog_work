@@ -31,7 +31,7 @@
 上記のモジュールの接続関係を図\ref{fig:golden_top_block}に示す．
 \begin{figure}[h]
   \centerning
-  %% \includegraphics[width=\textwidth]{myRTL.png}
+  \includegraphics[width=\textwidth]{myRTL.png}
   \caption{Golden\_Top のサブモジュール間の接続関係}
   \label{fig:golden_top_block}
 \end{figure}
@@ -124,6 +124,7 @@ KEY は立下がりを検出する．
 \end{table}
 \begin{figure}
   \centering
+  %% wip
   %% \includegraphics[width=\textwidth]{sccm.png}
   \caption{SingleCycleClockMIPS のサブモジュール接続関係}
   \label{fig:sccm_mod}
@@ -356,7 +357,98 @@ I形式算術命令またはR形式命令の場合は Resultを，
 \end{table}
 
 \subsection{SELECTOR}
+本モジュールは Golden\_Top で利用されており，
+SingleCycleClockMIPSの動作を確認するために用いる7SEGに表示するデータを出力する．
+DE10-liteのSW2-0を利用し，6種類のデータを選択する．
+表\ref{tab:selector}に入力パターンと選択する信号を示す．
+\begin{table}
+  \caption{SELECTOR の入力パターンと出力信号}
+  \centering
+  \begin{tabular}{l|l}
+    SW2, SW1, SW0 & 出力信号 \\
+    \hline
+    0, 0, 0 & Rdata1 \\
+    0, 0, 1 & Rdata2 \\
+    0, 1, 0 & Result \\
+    0, 1, 1 & Wdata \\
+    1, 0, 0 & nextPC \\
+    1, 0, 1 & newPC \\
+  \end{tabular}
+  \label{tab:selector}
+\end{table}
 
+本モジュールの入力・出力信号を表\ref{tab:sel_input}, \ref{tab:sel_output}に示す．
+\begin{table}[h]
+  \caption{MA の入力}
+  \centering
+  \begin{tabular}{l|l|l}
+    信号名 & ビット幅 & 説明 \\
+    \hline
+    Rdata1 & [31:0] & IDモジュールで読み出した値 \\
+    Rdata2 & [31:0] & IDモジュールで読み出した値 \\
+    Result & [31:0] & EXモジュールのALUの演算結果 \\
+    Wdata & [31:0] & IDモジュールで書き込む値 \\
+    nextPC & [31:0] & PCに4を加えた値 \\
+    newPC & [31:0] & 次に命令を実行するアドレス \\
+  \end{tabular}
+  \label{tab:ma_input}
+\end{table}
+\begin{table}[h]
+  \caption{MA の出力}
+  \centering
+  \begin{tabular}{l|l|l}
+    信号名 & ビット幅 & 説明 \\
+    \hline
+    SEL\_LED & [5:0] & 選択した信号を示すLED \\
+    Vdata & [31:0] & 選択されたデータ \\
+  \end{tabular}
+  \label{tab:ma_output}
+\end{table}
 
 \subsection{SEG7DEC}
+本モジュールは Golden\_Top で利用されており，
+PCおよび，SELECTORモジュールで選択された信号を表示するために用いられる．
+このモジュールは1桁のみ表示することができるため，
+表\ref{tab:7seg}に示すように6個の7SEGにそれぞれ信号を振り分ける．
+\begin{table}
+  \caption{SEG7DEC に与える信号}
+  \centering
+  \begin{tabular}{l|l|l}
+    DE10-lite の表示場所 & インスタンス名 & 与える信号 \\
+    \hline
+    HEX0 & Res00 & vdata[3:0] \\
+    HEX1 & Res00 & vdata[7:4] \\
+    HEX2 & Res00 & vdata[11:8] \\
+    HEX3 & Res00 & vdata[15:12] \\
+    HEX4 & Res00 & PC[5:2] \\
+    HEX5 & Res00 & PC[9:6] \\
+  \end{tabular}
+  \label{tab:7seg}
+\end{table}
+なお，vdataはSELECTORの出力信号である．
+
+本モジュールの入力・出力信号を表\ref{tab:7seg_input}, \ref{tab:7seg_output}に示す．
+\begin{table}[h]
+  \caption{SEG7DEC の入力}
+  \centering
+  \begin{tabular}{l|l|l}
+    信号名 & ビット幅 & 説明 \\
+    \hline
+    DIN & [3:0] & 0--F の数値 \\
+    EN & [0:0] & 値を表示するかを選択する信号 \\
+    DOT & [0:0] & 7SEGのドットを表示するかを選択する信号 \\
+  \end{tabular}
+  \label{tab:ma_input}
+\end{table}
+\begin{table}[h]
+  \caption{SEG7DEC の出力}
+  \centering
+  \begin{tabular}{l|l|l}
+    信号名 & ビット幅 & 説明 \\
+    \hline
+    nHEX & [7:0] & 7SEGの点灯状態を示す値 \\
+  \end{tabular}
+  \label{tab:ma_output}
+\end{table}
+
 

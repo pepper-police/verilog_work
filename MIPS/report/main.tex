@@ -42,7 +42,7 @@ PC 	[31:0] 	次に実行する命令アドレスを格納するレジスタ値
 \usepackage{verbatim}
 
 \title{計算機設計論 レポート課題:MIPSプロセッサの回路設計}
-\author{1295149 森岡悠人\\}
+\author{1295149 森岡悠人\\ 1295148 松本吏司}
 \date{\today}
 
 \begin{document}
@@ -51,13 +51,13 @@ PC 	[31:0] 	次に実行する命令アドレスを格納するレジスタ値
 \section{モジュール仕様書}
 \input{module}
 
-QuartusのRTL Viewerを用いて出力した，DE10-liteに書き込んだモジュールのブロック図を図\ref{fig:rtl}に示す．
-\begin{figure}[h]
-\centering
-  \includegraphics[width=\textwidth]{myRTL.png}
-  \caption{作成したMIPS回路のブロック図}
-  \label{fig:rtl}
-\end{figure}
+%% QuartusのRTL Viewerを用いて出力した，DE10-liteに書き込んだモジュールのブロック図を図\ref{fig:rtl}に示す．
+%% \begin{figure}[h]
+%% \centering
+%%   \includegraphics[width=\textwidth]{myRTL.png}
+%%   \caption{作成したMIPS回路のブロック図}
+%%   \label{fig:rtl}
+%% \end{figure}
 
 
 
@@ -215,7 +215,7 @@ modelsimのシミュレーションのみたい箇所の信号が確認できる
 そのため，流れが追いやすく，デバッグしやすかった反面，他にも実装パターンは複数考えられるので，本当はさらに効率のいい実装方法があるのだろうなと思った．
 それとも，コンパイルして論理合成すると，結局同じ回路になるのかどうか興味が湧いた．
 
-
+\subsection{松本吏司}
 
 
 
@@ -235,6 +235,9 @@ modelsimおよびquartus primeの操作やプロジェクトファイルの構�
 その結果，かつて苦しんだアセンブラの実験の内容をおさらいできたことに加え，FPGA実機を用いたverilogの回路設計の経験を積むことができ，新たな知見を得られたため，受講して良かったと感じている．
 また，ペアの松本の実装が速く，常に私に先行してALUや命令実行時の動作について教えてくれた．
 起こった問題に対して二人でアイデアを出し合いながら原因を検討し，試行錯誤の中で回路の理解を深められたことが，今回の課題がうまく行った理由ではないかと感じている．
+
+\subsection{松本吏司}
+
 
 \section*{謝辞}
 本課題に取り組む過程で，忙しい中何度も有益な助言をくださった大崎綾斗さん，門屋陽丈さんに感謝いたします．
